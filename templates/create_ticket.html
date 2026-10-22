@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Ticket</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="create-ticket-container">
+
+        <h1>Create New Ticket</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <p role="alert">{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <div class="welcome">
+
+            <form method="POST">
+
+                <!-- CSRF Security Token -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <label for="employee_name">Employee Name</label>
+                <br>
+                <input
+                    type="text"
+                    id="employee_name"
+                    name="employee_name"
+                    required
+                >
+
+                <br><br>
+
+                <label for="email">Email</label>
+                <br>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                >
+
+                <br><br>
+
+                <label for="title">Issue Title</label>
+                <br>
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    required
+                >
+
+                <br><br>
+
+                <label for="description">Description</label>
+                <br>
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="6"
+                    required
+                ></textarea>
+
+                <br><br>
+
+                <label for="priority">Priority</label>
+                <br>
+                <select id="priority" name="priority" required>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                    <option value="Critical">Critical</option>
+                </select>
+
+                <br><br>
+
+                <label for="assigned_to">Assigned To</label>
+                <br>
+                <select id="assigned_to" name="assigned_to" required>
+                    <option value="Unassigned">Unassigned</option>
+                    <option value="IT Support">IT Support</option>
+                    <option value="IT Technician">IT Technician</option>
+                    <option value="Network Support">Network Support</option>
+                </select>
+
+                <br><br>
+
+                <button type="submit">Submit Ticket</button>
+
+            </form>
+
+        </div>
+
+        <br>
+
+        <a href="{{ url_for('dashboard') }}">
+            <button type="button">Back to Dashboard</button>
+        </a>
+
+    </div>
+
+</body>
+</html>

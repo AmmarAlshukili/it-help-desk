@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ticket Details</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="tickets-container">
+
+        <h1>Ticket #{{ ticket["id"] }}</h1>
+
+        <div class="welcome">
+
+            <h2>{{ ticket["title"] }}</h2>
+
+            <p>
+                <strong>Employee:</strong>
+                {{ ticket["employee_name"] }}
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                {{ ticket["email"] }}
+            </p>
+
+            <p>
+                <strong>Priority:</strong>
+                {{ ticket["priority"] }}
+            </p>
+            <p>
+                <strong>Assigned To:</strong>
+                 {{ ticket["assigned_to"] }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                {{ ticket["status"] }}
+            </p>
+
+            <p>
+                <strong>Created At:</strong>
+                {{ ticket["created_at"] }}
+            </p>
+
+            <hr>
+
+            <h3>Description</h3>
+
+            <p>
+                {{ ticket["description"] }}
+            </p>
+
+        </div>
+
+        <br>
+
+        <a href="/tickets">
+            <button>Back to Tickets</button>
+        </a>
+
+    </div>
+
+</body>
+
+</html>

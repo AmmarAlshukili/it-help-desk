@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | IT Help Desk</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            font-family: 'Inter', sans-serif;
+            color: #172033;
+            background:
+                radial-gradient(circle at 15% 20%, #263d70 0, transparent 35%),
+                radial-gradient(circle at 85% 80%, #183b62 0, transparent 35%),
+                #0b1220;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 430px;
+        }
+
+        .brand {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .brand-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #4f8cff, #2563eb);
+            box-shadow: 0 10px 30px #2563eb40;
+            font-size: 29px;
+        }
+
+        .brand h1 {
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: -0.7px;
+        }
+
+        .brand p {
+            margin-top: 9px;
+            color: #9baac2;
+            font-size: 13px;
+        }
+
+        .login-card {
+            padding: 38px;
+            background: #ffffff;
+            border: 1px solid #ffffff30;
+            border-radius: 22px;
+            box-shadow: 0 25px 70px #00000040;
+        }
+
+        .login-card h2 {
+            font-size: 25px;
+            letter-spacing: -0.7px;
+            margin-bottom: 9px;
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 9px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #344054;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid #dce2eb;
+            border-radius: 11px;
+            outline: none;
+            background: #f9fafc;
+            font-family: inherit;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .input-wrap input:focus {
+            border-color: #3b82f6;
+            background: white;
+            box-shadow: 0 0 0 4px #3b82f61a;
+        }
+
+        .password-input {
+            padding-right: 48px !important;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 8px;
+            padding: 15px;
+            border: none;
+            border-radius: 11px;
+            color: white;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 18px #2563eb30;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px #2563eb40;
+        }
+
+        .error-message {
+            margin-bottom: 20px;
+            padding: 12px 14px;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            color: #b91c1c;
+            background: #fef2f2;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .footer {
+            margin-top: 24px;
+            text-align: center;
+            color: #9baac2;
+            font-size: 11px;
+        }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 28px 22px;
+            }
+
+            .brand h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="login-container">
+
+        <header class="brand">
+            <div class="brand-icon">⌘</div>
+            <h1>IT Help Desk</h1>
+            <p>IT Support & Ticket Management</p>
+        </header>
+
+        <section class="login-card">
+            <h2>Welcome back</h2>
+            <p class="subtitle">
+                Sign in to access your IT support workspace.
+            </p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="error-message" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('login') }}">
+                <input type="hidden" name="csrf_token"
+                       value="{{ csrf_token() }}">
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-wrap">
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            required
+                            autofocus>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrap">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="password-input"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required>
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            id="togglePassword"
+                            aria-label="Show password">
+                            Show
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    Sign in to your account →
+                </button>
+            </form>
+        </section>
+
+        <footer class="footer">
+            Secure IT Support Portal
+        </footer>
+
+    </main>
+
+    <script>
+        const passwordInput = document.getElementById("password");
+        const toggleButton = document.getElementById("togglePassword");
+
+        toggleButton.addEventListener("click", function () {
+            const isHidden = passwordInput.type === "password";
+
+            passwordInput.type = isHidden ? "text" : "password";
+            toggleButton.textContent = isHidden ? "Hide" : "Show";
+            toggleButton.setAttribute(
+                "aria-label",
+                isHidden ? "Hide password" : "Show password"
+            );
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Help Desk</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>IT Help Desk</h1>
+        <p>IT Support Ticketing System</p>
+    </header>
+
+    <main>
+        <section class="welcome">
+            <h2>Welcome to IT Help Desk</h2>
+            <p>Manage your IT support requests in one place.</p>
+
+            <a href="/create-ticket">
+    <button>Create New Ticket</button>
+</a>
+
+<a href="/tickets">
+    <button>View Tickets</button>
+</a>
+        </section>
+    </main>
+
+</body>
+</html>

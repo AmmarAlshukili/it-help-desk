@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Tickets</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="tickets-container">
+
+    <h1>IT Support Tickets</h1>
+
+    <a href="{{ url_for('dashboard') }}">
+        <button type="button">Back to Dashboard</button>
+    </a>
+
+    <form method="GET" action="{{ url_for('tickets') }}">
+
+        <label for="search">Search:</label>
+        <input
+            type="text"
+            name="search"
+            id="search"
+            placeholder="Search tickets..."
+            value="{{ request.args.get('search', '') }}"
+        >
+
+        <label for="status">Status:</label>
+        <select name="status" id="status">
+            <option value="">All</option>
+            {% for option in ['Open', 'In Progress', 'Resolved', 'Closed'] %}
+                <option value="{{ option }}"
+                    {% if request.args.get('status', '') == option %}selected{% endif %}>
+                    {{ option }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="priority">Priority:</label>
+        <select name="priority" id="priority">
+            <option value="">All</option>
+            {% for option in ['Low', 'Medium', 'High', 'Critical'] %}
+                <option value="{{ option }}"
+                    {% if request.args.get('priority', '') == option %}selected{% endif %}>
+                    {{ option }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="assigned_to">Assigned To:</label>
+        <select name="assigned_to" id="assigned_to">
+            <option value="">All</option>
+            {% for option in ['Unassigned', 'IT Support', 'IT Technician', 'Network Support'] %}
+                <option value="{{ option }}"
+                    {% if request.args.get('assigned_to', '') == option %}selected{% endif %}>
+                    {{ option }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filter</button>
+    </form>
+
+    <table class="tickets-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Employee</th>
+                <th>Email</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Priority</th>
+                <th>Assigned To</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket["id"] }}</td>
+                <td>{{ ticket["employee_name"] }}</td>
+                <td>{{ ticket["email"] }}</td>
+                <td>{{ ticket["title"] }}</td>
+                <td>{{ ticket["description"] }}</td>
+
+                <td>
+                    <span class="priority-badge priority-{{ ticket['priority']|lower }}">
+                        {{ ticket["priority"] }}
+                    </span>
+                </td>
+
+                <td>
+                    <form method="POST" action="{{ url_for('update_assignment') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="ticket_id" value="{{ ticket['id'] }}">
+                        <input type="hidden" name="search" value="{{ request.args.get('search', '') }}">
+                        <input type="hidden" name="priority" value="{{ request.args.get('priority', '') }}">
+                        <input type="hidden" name="status" value="{{ request.args.get('status', '') }}">
+
+                        <select
+                            name="assigned_to"
+                            onchange="this.form.submit()"
+                            aria-label="Assign ticket {{ ticket['id'] }}"
+                        >
+                            {% for option in ['Unassigned', 'IT Support', 'IT Technician', 'Network Support'] %}
+                                <option value="{{ option }}"
+                                    {% if ticket["assigned_to"] == option %}selected{% endif %}>
+                                    {{ option }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </td>
+
+                <td>
+                    <form method="POST" action="{{ url_for('update_status') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="ticket_id" value="{{ ticket['id'] }}">
+                        <input type="hidden" name="search" value="{{ request.args.get('search', '') }}">
+                        <input type="hidden" name="priority" value="{{ request.args.get('priority', '') }}">
+                        <input type="hidden" name="current_status" value="{{ request.args.get('status', '') }}">
+
+                        <select
+                            name="status"
+                            class="status-select status-{{ ticket['status']|lower|replace(' ', '-') }}"
+                            onchange="this.form.submit()"
+                            aria-label="Update status for ticket {{ ticket['id'] }}"
+                        >
+                            {% for option in ['Open', 'In Progress', 'Resolved', 'Closed'] %}
+                                <option value="{{ option }}"
+                                    {% if ticket["status"] == option %}selected{% endif %}>
+                                    {{ option }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </td>
+
+                <td>{{ ticket["created_at"] }}</td>
+
+                <td>
+                    <a href="{{ url_for('ticket_details', ticket_id=ticket['id']) }}">
+                        <button type="button">View Details</button>
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="10">No tickets found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <form method="POST" action="{{ url_for('logout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit">Logout</button>
+    </form>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="tickets-container">
+
+        <h1>IT Help Desk Dashboard</h1>
+
+        <p>Welcome, {{ session.get('username', 'User') }}!</p>
+
+        <div class="dashboard-stats">
+
+            <div class="stat-card total-card">
+                <h2>Total</h2>
+                <p>{{ total_tickets }}</p>
+            </div>
+
+            <div class="stat-card open-card">
+                <h2>Open</h2>
+                <p>{{ open_tickets }}</p>
+            </div>
+
+            <div class="stat-card progress-card">
+                <h2>In Progress</h2>
+                <p>{{ in_progress_tickets }}</p>
+            </div>
+
+            <div class="stat-card resolved-card">
+                <h2>Resolved</h2>
+                <p>{{ resolved_tickets }}</p>
+            </div>
+
+            <div class="stat-card closed-card">
+                <h2>Closed</h2>
+                <p>{{ closed_tickets }}</p>
+            </div>
+
+            <a href="{{ url_for('tickets', priority='Low') }}" class="dashboard-link">
+                <div class="stat-card">
+                    <h2>Low Priority</h2>
+                    <p>{{ low_tickets }}</p>
+                </div>
+            </a>
+
+            <a href="{{ url_for('tickets', priority='Medium') }}" class="dashboard-link">
+                <div class="stat-card">
+                    <h2>Medium Priority</h2>
+                    <p>{{ medium_tickets }}</p>
+                </div>
+            </a>
+
+            <a href="{{ url_for('tickets', priority='High') }}" class="dashboard-link">
+                <div class="stat-card">
+                    <h2>High Priority</h2>
+                    <p>{{ high_tickets }}</p>
+                </div>
+            </a>
+
+            <a href="{{ url_for('tickets', priority='Critical') }}" class="dashboard-link">
+                <div class="stat-card">
+                    <h2>Critical Priority</h2>
+                    <p>{{ critical_tickets }}</p>
+                </div>
+            </a>
+
+            <div class="stat-card resolved-rate-card">
+                <h2>Resolved Rate</h2>
+                <p>{{ resolved_rate }}%</p>
+            </div>
+
+        </div>
+
+        <br>
+
+        <a href="{{ url_for('tickets') }}">
+            <button type="button">View Tickets</button>
+        </a>
+
+        <a href="{{ url_for('create_ticket') }}">
+            <button type="button">Create Ticket</button>
+        </a>
+
+        <form action="{{ url_for('logout') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit">Logout</button>
+        </form>
+
+    </div>
+
+</body>
+</html>
